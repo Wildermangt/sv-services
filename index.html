@@ -1,0 +1,3571 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SV.Services | Plataforma de Gestión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Geist+Mono:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-base: #09090b;
+        --bg-raised: #0f1015;
+        --bg-overlay: #141419;
+        --bg-float: #1a1a22;
+        --bg-subtle: #1f1f28;
+        --line: rgba(255, 255, 255, 0.06);
+        --line-mid: rgba(255, 255, 255, 0.1);
+        --line-hi: rgba(255, 255, 255, 0.16);
+        --t1: #f4f4f5;
+        --t2: #a1a1aa;
+        --t3: #71717a;
+        --t4: #52525b;
+        --brand: #6366f1;
+        --brand-light: #818cf8;
+        --brand-dim: #6366f115;
+        --green: #22c55e;
+        --green-dim: #22c55e18;
+        --amber: #f59e0b;
+        --amber-dim: #f59e0b18;
+        --red: #ef4444;
+        --red-dim: #ef444418;
+        --blue: #3b82f6;
+        --blue-dim: #3b82f618;
+        --purple: #a855f7;
+        --purple-dim: #a855f718;
+        --cyan: #06b6d4;
+        --r8: 8px;
+        --r12: 12px;
+        --r16: 16px;
+        --sb: 240px;
+        --tb: 52px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        background: var(--bg-base);
+        color: var(--t1);
+        font-family: "Bricolage Grotesque", system-ui, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+      }
+
+      /* LOGIN */
+      #loginScreen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 60% 40%,
+          #1a1a3a 0%,
+          var(--bg-base) 70%
+        );
+        z-index: 100;
+      }
+      .login-mesh {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.08) 1px,
+          transparent 1px
+        );
+        background-size: 32px 32px;
+        pointer-events: none;
+      }
+      .login-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+        background-size: 80px 80px;
+        pointer-events: none;
+      }
+      .login-card {
+        position: relative;
+        background: rgba(15, 16, 21, 0.92);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r16);
+        padding: 36px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow:
+          0 24px 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(99, 102, 241, 0.1);
+        backdrop-filter: blur(20px);
+      }
+      .login-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .brand-cube {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 16px;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .brand-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--t1);
+        letter-spacing: -0.3px;
+      }
+      .brand-title em {
+        color: var(--brand-light);
+        font-style: normal;
+      }
+      .brand-tagline {
+        font-size: 11px;
+        color: var(--t3);
+        margin-top: 1px;
+      }
+      .login-h {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+      .login-sub {
+        font-size: 13px;
+        color: var(--t3);
+        margin-bottom: 22px;
+      }
+      .f-row {
+        margin-bottom: 14px;
+      }
+      .f-label {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--t2);
+        margin-bottom: 5px;
+        letter-spacing: 0.02em;
+      }
+      .f-ctrl {
+        width: 100%;
+        background: var(--bg-float);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r8);
+        padding: 9px 12px;
+        color: var(--t1);
+        font-size: 13.5px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .f-ctrl:focus {
+        border-color: var(--brand);
+      }
+      .login-btn {
+        width: 100%;
+        padding: 11px;
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        border: none;
+        border-radius: var(--r8);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          opacity 0.15s,
+          transform 0.1s;
+        font-family: inherit;
+        margin-bottom: 18px;
+      }
+      .login-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+      .login-btn:disabled {
+        opacity: 0.6;
+        cursor: wait;
+        transform: none;
+      }
+      .login-footer {
+        font-size: 11px;
+        color: var(--t4);
+        text-align: center;
+      }
+
+      /* APP LAYOUT */
+      #app {
+        display: none;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        inset: 0;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: var(--sb);
+        background: var(--bg-raised);
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+        transition: transform 0.2s;
+      }
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 49;
+      }
+      .sidebar-overlay.open {
+        display: block;
+      }
+      .sb-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+        flex-shrink: 0;
+      }
+      .sb-cube {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .sb-brand {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--t1);
+      }
+      .sb-brand span {
+        color: var(--brand-light);
+      }
+      .sb-ver {
+        font-size: 10px;
+        color: var(--t4);
+      }
+      .sb-nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+      .sb-section {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--t4);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 12px 16px 4px;
+      }
+      .sb-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 0;
+        font-size: 13px;
+        color: var(--t2);
+        transition: all 0.12s;
+        position: relative;
+      }
+      .sb-item:hover {
+        background: var(--bg-overlay);
+        color: var(--t1);
+      }
+      .sb-item.active {
+        background: var(--brand-dim);
+        color: var(--brand-light);
+        font-weight: 600;
+      }
+      .sb-ico {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+      }
+      .sb-badge {
+        background: var(--brand);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 99px;
+        margin-left: auto;
+      }
+      .sb-foot {
+        padding: 12px;
+        border-top: 1px solid var(--line);
+        flex-shrink: 0;
+      }
+      .sb-user {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 8px;
+      }
+      .sb-uname {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--t1);
+      }
+      .sb-urole {
+        font-size: 10.5px;
+        color: var(--t3);
+      }
+      .sb-logout {
+        width: 100%;
+        padding: 7px;
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        color: var(--t3);
+        font-size: 12px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.12s;
+      }
+      .sb-logout:hover {
+        border-color: var(--red);
+        color: var(--red);
+      }
+
+      .topbar {
+        position: fixed;
+        left: var(--sb);
+        top: 0;
+        right: 0;
+        height: var(--tb);
+        background: rgba(9, 9, 11, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 18px;
+        z-index: 40;
+      }
+      .tb-menu-btn {
+        display: none;
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        color: var(--t2);
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .tb-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--t1);
+        letter-spacing: -0.2px;
+      }
+      .tb-sub {
+        font-size: 11px;
+        color: var(--t3);
+      }
+      .tb-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tb-notif {
+        position: relative;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        user-select: none;
+      }
+      .notif-pip {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        background: var(--red);
+        border-radius: 50%;
+        border: 2px solid var(--bg-base);
+        display: none;
+      }
+
+      .main {
+        position: fixed;
+        left: var(--sb);
+        top: var(--tb);
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+      }
+      .page {
+        padding: 22px 24px;
+        min-height: 100%;
+      }
+
+      /* NOTIFICATIONS PANEL */
+      .npanel {
+        position: fixed;
+        right: -320px;
+        top: var(--tb);
+        bottom: 0;
+        width: 300px;
+        background: var(--bg-raised);
+        border-left: 1px solid var(--line);
+        z-index: 60;
+        transition: right 0.2s;
+        overflow-y: auto;
+      }
+      .npanel.open {
+        right: 0;
+      }
+      .npanel-h {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      /* CARDS */
+      .card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r12);
+        padding: 18px;
+        margin-bottom: 14px;
+      }
+      .card-sm {
+        padding: 12px;
+      }
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .stat {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r12);
+        padding: 16px;
+      }
+      .stat-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .stat-val {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 2px;
+      }
+      .stat-lbl {
+        font-size: 11.5px;
+        color: var(--t3);
+        margin-bottom: 10px;
+      }
+      .stat-bar {
+        height: 3px;
+        background: var(--line);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .stat-bar-fill {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.3s;
+      }
+
+      /* BADGES */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 99px;
+        font-size: 10.5px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .b-pending {
+        background: #f59e0b18;
+        color: #f59e0b;
+      }
+      .b-active {
+        background: #6366f118;
+        color: #818cf8;
+      }
+      .b-approval {
+        background: #a855f718;
+        color: #c084fc;
+      }
+      .b-done {
+        background: #22c55e18;
+        color: #22c55e;
+      }
+      .b-rejected {
+        background: #ef444418;
+        color: #ef4444;
+      }
+      .b-info {
+        background: #06b6d418;
+        color: #06b6d4;
+      }
+
+      /* BUTTONS */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: var(--r8);
+        border: 1px solid var(--line);
+        background: none;
+        color: var(--t2);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.12s;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        border-color: var(--line-hi);
+        color: var(--t1);
+      }
+      .btn-brand {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+      }
+      .btn-brand:hover {
+        background: var(--brand-light);
+        border-color: var(--brand-light);
+        color: #fff;
+      }
+      .btn-ghost {
+        background: none;
+      }
+      .btn-danger {
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .btn-danger:hover {
+        background: var(--red-dim);
+      }
+      .btn-success {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: #fff;
+      }
+      .btn-sm {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .btn-xs {
+        padding: 3px 7px;
+        font-size: 11px;
+      }
+
+      /* TABLES */
+      .tbl-wrap {
+        overflow-x: auto;
+        border-radius: var(--r8);
+        border: 1px solid var(--line);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--t3);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 9px 12px;
+        background: var(--bg-float);
+        border-bottom: 1px solid var(--line);
+      }
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--t2);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr:hover td {
+        background: var(--bg-float);
+      }
+
+      /* PROGRESS */
+      .prog-track {
+        height: 5px;
+        background: var(--line-mid);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .prog-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.3s;
+      }
+
+      /* TASK CARD */
+      .task-card {
+        position: relative;
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r12);
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .task-card:hover {
+        border-color: var(--line-hi);
+        transform: translateY(-1px);
+      }
+      .tc-h {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .tc-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.3;
+        flex: 1;
+      }
+      .tc-desc {
+        font-size: 12px;
+        color: var(--t3);
+        line-height: 1.5;
+        margin-bottom: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .tc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--t3);
+      }
+
+      /* CHIP */
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        background: var(--bg-float);
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        font-size: 11px;
+        color: var(--t2);
+      }
+
+      /* AVATAR */
+      .ava {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+      .ava-sm {
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
+      }
+      .ava-lg {
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
+      }
+
+      /* MODAL */
+      #modalRoot:not(:empty) {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .modal {
+        position: relative;
+        background: var(--bg-overlay);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r16);
+        padding: 24px;
+        width: 100%;
+        max-width: 560px;
+        max-height: 85vh;
+        overflow-y: auto;
+        z-index: 1;
+      }
+      .modal-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        color: var(--t3);
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .modal-h {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 18px;
+        letter-spacing: -0.3px;
+      }
+      .modal-foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+
+      /* TOAST */
+      #toastRoot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 300;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      /* ALERTS */
+      .alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: var(--r8);
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      .alert-ok {
+        background: #22c55e10;
+        border: 1px solid #22c55e30;
+        color: var(--t1);
+      }
+      .alert-warn {
+        background: #f59e0b10;
+        border: 1px solid #f59e0b30;
+        color: var(--t1);
+      }
+      .alert-info {
+        background: #6366f110;
+        border: 1px solid #6366f130;
+        color: var(--t1);
+      }
+
+      /* TIMELINE */
+      .tl {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .tl-item {
+        display: grid;
+        grid-template-columns: 16px 1fr auto;
+        align-items: start;
+        gap: 8px;
+        padding: 8px 0;
+        border-left: 2px solid var(--line);
+        padding-left: 14px;
+        margin-left: 8px;
+        position: relative;
+      }
+      .tl-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--line-hi);
+        position: absolute;
+        left: -6px;
+        top: 12px;
+        flex-shrink: 0;
+      }
+      .tl-dot.live {
+        background: var(--brand);
+      }
+      .tl-dot.done {
+        background: var(--green);
+      }
+      .tl-lbl {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--t1);
+      }
+      .tl-date {
+        font-size: 10.5px;
+        color: var(--t4);
+        white-space: nowrap;
+      }
+      .tl-note {
+        font-size: 11.5px;
+        color: var(--t3);
+        grid-column: 2/-1;
+        margin-top: 1px;
+      }
+
+      /* PAGE */
+      .pg-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .pg-h {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+        color: var(--t1);
+      }
+      .pg-sub {
+        font-size: 12.5px;
+        color: var(--t3);
+        margin-top: 2px;
+      }
+
+      /* EMPTY STATE */
+      .empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 20px;
+        text-align: center;
+      }
+      .empty-ico {
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+      .empty-h {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .empty-s {
+        font-size: 13px;
+        color: var(--t3);
+      }
+
+      /* DIVIDER */
+      .divider {
+        height: 1px;
+        background: var(--line);
+        margin: 16px 0;
+      }
+
+      /* KANBAN */
+      .kanban-board {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        align-items: start;
+      }
+      .kanban-col {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r12);
+        padding: 14px;
+        min-height: 200px;
+        transition: background 0.15s;
+      }
+      .kanban-col.drag-over {
+        background: var(--brand-dim);
+        border-color: var(--brand);
+      }
+      .kanban-col-h {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .kanban-col-lbl {
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .kanban-col-cnt {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 99px;
+      }
+      .kanban-card {
+        background: var(--bg-overlay);
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        padding: 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .kanban-card:hover {
+        border-color: var(--line-hi);
+      }
+      .kanban-card-title {
+        font-size: 12.5px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
+      .kanban-card-desc {
+        font-size: 11px;
+        color: var(--t3);
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .kanban-card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .kanban-move-btns {
+        display: flex;
+        gap: 3px;
+        flex-wrap: wrap;
+      }
+
+      /* FORMS */
+      .fg {
+        margin-bottom: 16px;
+      }
+      .fi {
+        width: 100%;
+        background: var(--bg-float);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r8);
+        padding: 8px 12px;
+        color: var(--t1);
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .fi:focus {
+        border-color: var(--brand);
+      }
+      .ft {
+        width: 100%;
+        background: var(--bg-float);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r8);
+        padding: 9px 12px;
+        color: var(--t1);
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        resize: vertical;
+        min-height: 80px;
+        transition: border-color 0.15s;
+      }
+      .ft:focus {
+        border-color: var(--brand);
+      }
+      .fs {
+        width: 100%;
+        background: var(--bg-float);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r8);
+        padding: 8px 12px;
+        color: var(--t1);
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+      }
+      .fl {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--t2);
+        margin-bottom: 5px;
+      }
+      .fgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .fsection {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--t1);
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      /* CALENDAR */
+      .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+      }
+      .cal-dow {
+        text-align: center;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--t4);
+        padding: 6px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .cal-cell {
+        min-height: 72px;
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        padding: 6px;
+        cursor: pointer;
+        transition: all 0.12s;
+      }
+      .cal-cell:hover {
+        border-color: var(--line-hi);
+        background: var(--bg-overlay);
+      }
+      .cal-cell.today {
+        border-color: var(--brand);
+        background: var(--brand-dim);
+      }
+      .cal-cell.other-month {
+        opacity: 0.35;
+      }
+      .cal-day-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--t3);
+        margin-bottom: 3px;
+      }
+      .cal-dot {
+        font-size: 9.5px;
+        padding: 1px 4px;
+        border-radius: 4px;
+        margin-bottom: 2px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* DOCS */
+      .docs-section-h {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        margin-top: 20px;
+        color: var(--t2);
+      }
+      .docs-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
+        margin-bottom: 22px;
+      }
+      .doc-photo-card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        overflow: hidden;
+      }
+      .doc-photo-card img {
+        width: 100%;
+        height: 110px;
+        object-fit: cover;
+        display: block;
+      }
+      .doc-photo-info {
+        padding: 8px 10px;
+        font-size: 11px;
+        color: var(--t3);
+      }
+      .docs-file-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-bottom: 22px;
+      }
+      .doc-file-card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r8);
+        padding: 14px;
+        transition: all 0.15s;
+        display: flex;
+        flex-direction: column;
+      }
+      .doc-file-card:hover {
+        border-color: var(--brand);
+        transform: translateY(-2px);
+      }
+      .doc-file-ico {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+      .doc-file-name {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 3px;
+        word-break: break-all;
+      }
+      .doc-file-meta {
+        font-size: 10.5px;
+        color: var(--t3);
+        flex: 1;
+      }
+
+      /* CONFIG */
+      .cfg-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 20px;
+      }
+      .cfg-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 4px;
+      }
+      .cfg-tab {
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--t3);
+        cursor: pointer;
+        border-radius: var(--r8);
+        transition: all 0.12s;
+      }
+      .cfg-tab:hover {
+        color: var(--t2);
+        background: var(--bg-raised);
+      }
+      .cfg-tab.active {
+        color: var(--brand-light);
+        background: var(--brand-dim);
+      }
+      .cfg-panel {
+        display: none;
+      }
+      .cfg-panel.active {
+        display: block;
+      }
+      .mysql-status {
+        display: flex;
+        align-items: center;
+        padding: 10px 14px;
+        background: var(--bg-float);
+        border: 1px solid var(--line-mid);
+        border-radius: var(--r8);
+        font-size: 12px;
+        color: var(--t3);
+      }
+      .cfg-preview-card {
+        background: var(--bg-raised);
+        border: 1px solid var(--line);
+        border-radius: var(--r12);
+        padding: 20px;
+        position: sticky;
+        top: 20px;
+      }
+      .preview-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .preview-cube {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 16px;
+        color: #fff;
+      }
+      .preview-name {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--t1);
+      }
+      .preview-tagline {
+        font-size: 11px;
+        color: var(--t3);
+      }
+
+      /* MISC */
+      .mysql-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+      }
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: none;
+        }
+        .sidebar-overlay.open {
+          display: block;
+        }
+        .topbar {
+          left: 0;
+        }
+        .main {
+          left: 0;
+        }
+        .tb-menu-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .stats-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .kanban-board {
+          grid-template-columns: 1fr;
+        }
+        .fgrid {
+          grid-template-columns: 1fr;
+        }
+        .cfg-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+      <div class="login-mesh"></div>
+      <div class="login-grid"></div>
+      <div class="login-card">
+        <div class="login-brand">
+          <div class="brand-cube">SV</div>
+          <div>
+            <div class="brand-title">SV.<em>Services</em></div>
+            <div class="brand-tagline">Gestión de servicios profesional</div>
+          </div>
+        </div>
+        <div class="login-h">Bienvenido</div>
+        <div class="login-sub">
+          Ingresa tus credenciales para acceder al panel.
+        </div>
+
+        <div class="f-row">
+          <label class="f-label">Correo electrónico</label>
+          <input
+            type="email"
+            id="loginEmail"
+            class="f-ctrl"
+            placeholder="nombre@empresa.com"
+            autocomplete="username"
+          />
+        </div>
+        <div class="f-row">
+          <label class="f-label">Contraseña</label>
+          <input
+            type="password"
+            id="loginPassword"
+            class="f-ctrl"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <div
+          id="loginStatus"
+          style="
+            font-size: 12px;
+            margin-bottom: 16px;
+            min-height: 16px;
+            transition: all 0.2s;
+          "
+        ></div>
+
+        <button id="loginButton" class="login-btn" onclick="loginPro()">
+          Ingresar al sistema →
+        </button>
+
+        <div class="login-footer">
+          Sistema de Gestión SV.Services v3.0.0<br />
+          © 2025 · Ing. Wilderman Gonzalez
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN APP LAYOUT -->
+    <div id="app">
+      <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        onclick="toggleSidebar(true)"
+      ></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sb-head">
+          <div class="sb-cube">SV</div>
+          <div style="flex: 1">
+            <div class="sb-brand">SV.<span>Services</span></div>
+            <div class="sb-ver">Platform v3.0</div>
+          </div>
+        </div>
+        <nav class="sb-nav" id="sbNav">
+          <!-- Dynamic nav items -->
+        </nav>
+        <div class="sb-foot">
+          <div class="sb-user" id="sbUser">
+            <!-- User info -->
+          </div>
+          <button class="sb-logout" onclick="logoutPro()">Cerrar Sesión</button>
+        </div>
+      </aside>
+
+      <header class="topbar">
+        <button class="tb-menu-btn" onclick="toggleSidebar()">☰</button>
+        <div>
+          <div class="tb-title" id="tbTitle">Panel Principal</div>
+          <div class="tb-sub" id="tbSub">Cargando datos...</div>
+        </div>
+        <div class="tb-right">
+          <div class="tb-notif" onclick="toggleNotif()">
+            🔔
+            <div class="notif-pip" id="notifPip"></div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="page" id="mainContent">
+          <!-- Dynamic content -->
+        </div>
+      </main>
+
+      <!-- NOTIFICATIONS PANEL -->
+      <div class="npanel" id="npanel">
+        <div class="npanel-h">
+          <span>Notificaciones</span>
+          <button class="btn btn-ghost btn-xs" onclick="toggleNotif()">
+            ✕
+          </button>
+        </div>
+        <div id="notifList" style="padding: 10px">
+          <!-- Notifications list -->
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERLAYS -->
+    <div id="modalRoot"></div>
+    <div id="toastRoot"></div>
+
+    <!-- SCRIPTS -->
+    <!-- Firebase SDK (v8 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <script>
+      "use strict";
+
+      /* ═══════════════════════════════════════════════════════
+           DATA STORE — API Mock / State
+        /* ═══════════════════════════════════════════════════════ */
+      const PREDEFINED_USERS = [
+        {
+          name: "David Rey",
+          email: "reydavid0210@hotmail.com",
+          role: "tech",
+          specialty: "Redes y Telecomunicaciones",
+          level: "Senior",
+        },
+        {
+          name: "Luis Garcia",
+          email: "luis.garcia@svservices.com",
+          role: "tech",
+          specialty: "Infraestructura Cloud",
+          level: "Especialista",
+        },
+        {
+          name: "Carlos Ruiz",
+          email: "carlos.ruiz@svservices.com",
+          role: "tech",
+          specialty: "Soporte TI y Hardware",
+          level: "Senior",
+        },
+        {
+          name: "Maria Lopez",
+          email: "maria.lopez@svservices.com",
+          role: "tech",
+          specialty: "Ciberseguridad",
+          level: "Especialista",
+        },
+        {
+          name: "Elena Torres",
+          email: "elena.torres@svservices.com",
+          role: "tech",
+          specialty: "Desarrollo de Software",
+          level: "Senior",
+        },
+        {
+          name: "Andres Martinez",
+          email: "andres.martinez@svservices.com",
+          role: "tech",
+          specialty: "Redes y WiFi",
+          level: "Junior",
+        },
+        {
+          name: "Sofia Vargas",
+          email: "sofia.vargas@svservices.com",
+          role: "tech",
+          specialty: "Base de Datos",
+          level: "Senior",
+        },
+        {
+          name: "Diego Herrera",
+          email: "diego.herrera@svservices.com",
+          role: "tech",
+          specialty: "Soporte Nivel 2",
+          level: "Junior",
+        },
+        {
+          name: "Valentina Cruz",
+          email: "valentina.cruz@svservices.com",
+          role: "tech",
+          specialty: "Virtualización y Servidores",
+          level: "Especialista",
+        },
+        {
+          name: "Roberto Sanchez",
+          email: "roberto.sanchez@svservices.com",
+          role: "tech",
+          specialty: "CCTV y Seguridad Física",
+          level: "Senior",
+        },
+        {
+          name: "Juan Perez",
+          email: "juan.perez@example.com",
+          role: "client",
+          nit: "900.111.222-1",
+          city: "Bogotá",
+          contact: "Juan Perez",
+        },
+        {
+          name: "Empresa ABC",
+          email: "contacto@abc.com",
+          role: "client",
+          nit: "900.333.444-2",
+          city: "Medellín",
+          contact: "Ana Gómez",
+        },
+      ];
+
+      const API = {
+        config: {
+          instagram: "https://instagram.com/...",
+          linkedin: "https://linkedin.com/company/...",
+          whatsapp: "https://wa.me/...",
+          twitter: "https://x.com/...",
+          author: "Ing. Wilderman Gonzalez",
+          version: "3.0.0",
+          currency: "COP",
+          timezone: "America/Bogota",
+          firebase: {
+            enabled: true,
+            apiKey: "AIzaSyCPoTKyAIU1hST0WDHf31LW8JTiJ6B9x2E",
+            authDomain: "sv-services-6a4f1.firebaseapp.com",
+            projectId: "sv-services-6a4f1",
+            storageBucket: "sv-services-6a4f1.firebasestorage.app",
+            messagingSenderId: "409126224204",
+            appId: "1:409126224204:web:626c79d6d79eab1dc64fe9",
+            measurementId: "G-X4DS3F3WQG",
+            usersCollection: "users",
+          },
+        },
+        users: [
+          {
+            id: "admin_root",
+            uid: "q0x1UJ9wVZP5acX0CbUr5HozyVJ2",
+            name: "Wilderman (Admin)",
+            email: "wildermangt@gmail.com",
+            role: "admin",
+            is_active: true,
+          },
+        ],
+        tasks: [],
+        approvals: [],
+        notifications: [],
+      };
+
+      const FALLBACK_USERS = API.users.map((user) => ({ ...user }));
+      const STORAGE_KEYS = { config: "sv.services.config.v1" };
+      const FIREBASE_RUNTIME = {
+        app: null,
+        auth: null,
+        db: null,
+        signature: "",
+      };
+
+      let CU = null,
+        VIEW = "",
+        NOTIF_OPEN = false,
+        currentCalendarDate = new Date();
+
+      const H = {
+        byId: (id) =>
+          API.users.find(
+            (u) =>
+              String(u.id) === String(id) || String(u.uid || "") === String(id),
+          ),
+        task: (id) => API.tasks.find((t) => String(t.id) === String(id)),
+        clients: () => API.users.filter((u) => u.role === "client"),
+        techs: () => API.users.filter((u) => u.role === "tech"),
+        cTasks: (cid) =>
+          API.tasks.filter((t) => String(t.clientId) === String(cid)),
+        tTasks: (tid) =>
+          API.tasks.filter((t) => String(t.techId) === String(tid)),
+        myNotifs: () =>
+          API.notifications.filter(
+            (n) =>
+              String(n.targetId) === String(CU?.id || "") ||
+              String(n.targetId) === String(CU?.uid || ""),
+          ),
+        unread: () =>
+          API.notifications.filter(
+            (n) =>
+              (String(n.targetId) === String(CU?.id || "") ||
+                String(n.targetId) === String(CU?.uid || "")) &&
+              !n.read,
+          ).length,
+        ini: (n) =>
+          n
+            .split(" ")
+            .slice(0, 2)
+            .map((w) => w[0])
+            .join("")
+            .toUpperCase(),
+        aColor: (n) => {
+          const p = [
+            "#6366f1",
+            "#22c55e",
+            "#a855f7",
+            "#f59e0b",
+            "#ef4444",
+            "#06b6d4",
+            "#ec4899",
+            "#14b8a6",
+          ];
+          return p[n.charCodeAt(0) % p.length];
+        },
+        ava: (n, sz = "sm") => {
+          const bg = H.aColor(n);
+          return `<div class="ava ava-${sz}" style="background:${bg}22;color:${bg};border:1.5px solid ${bg}44">${H.ini(n)}</div>`;
+        },
+        fmt: (n) =>
+          new Intl.NumberFormat("es-CO", {
+            style: "currency",
+            currency: "COP",
+            maximumFractionDigits: 0,
+          }).format(n),
+        sb: (s) => {
+          const m = {
+            pending: ["b-pending", "⏳ Pendiente"],
+            inprogress: ["b-active", "🔄 En Progreso"],
+            approval: ["b-approval", "👁 Aprobación"],
+            done: ["b-done", "✅ Finalizado"],
+            rejected: ["b-rejected", "❌ Rechazado"],
+          };
+          const [c, l] = m[s] || ["b-pending", s];
+          return `<span class="badge ${c}">${l}</span>`;
+        },
+        pb: (p) => {
+          const m = { alta: "b-rejected", media: "b-pending", baja: "b-info" };
+          return `<span class="badge ${m[p] || "b-info"}">${p}</span>`;
+        },
+        pc: (p) =>
+          p >= 80
+            ? "#22c55e"
+            : p >= 50
+              ? "#6366f1"
+              : p >= 25
+                ? "#f59e0b"
+                : "#ef4444",
+        prColor: (p) => {
+          const m = { alta: "#ef4444", media: "#f59e0b", baja: "#6366f1" };
+          return m[p] || "#6366f1";
+        },
+      };
+
+      /* ═══════════════════════════════════════════════════════
+           CORE LOGIC
+        /* ═══════════════════════════════════════════════════════ */
+
+      function mergeConfig(target, source) {
+        if (!source || typeof source !== "object") return target;
+        Object.keys(source).forEach((key) => {
+          const nextValue = source[key];
+          if (
+            nextValue &&
+            typeof nextValue === "object" &&
+            !Array.isArray(nextValue) &&
+            target[key] &&
+            typeof target[key] === "object" &&
+            !Array.isArray(target[key])
+          ) {
+            mergeConfig(target[key], nextValue);
+            return;
+          }
+          target[key] = nextValue;
+        });
+        return target;
+      }
+
+      function loadPersistedConfig() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.config);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          mergeConfig(API.config, parsed);
+          document.documentElement.style.setProperty(
+            "--brand",
+            API.config.primaryColor || "#6366f1",
+          );
+          updateLoginBrand();
+        } catch (error) {
+          console.warn("Config load error:", error);
+        }
+      }
+
+      function updateLoginBrand() {
+        const cfg = API.config;
+        const lb = document.querySelector(".login-brand");
+        if (!lb) return;
+        const logoHtml = cfg.logoUrl
+          ? `<img src="${cfg.logoUrl}" style="width:40px;height:40px;object-fit:contain">`
+          : `<div class="brand-cube" style="background:${cfg.primaryColor || "#6366f1"}">${(cfg.logoText || "SV")[0]}</div>`;
+        lb.innerHTML = `
+            ${logoHtml}
+            <div>
+                <div class="brand-title">${cfg.company?.split(".")[0] || "SV"}.<em>${cfg.company?.split(".")[1] || "Services"}</em></div>
+                <div class="brand-tagline">${cfg.slogan || "Gestión de servicios"}</div>
+            </div>`;
+      }
+
+      function persistConfig() {
+        localStorage.setItem(STORAGE_KEYS.config, JSON.stringify(API.config));
+      }
+
+      function setLoginStatus(message, type = "info") {
+        const el = document.getElementById("loginStatus");
+        if (!el) return;
+        const colors = {
+          info: "var(--t3)",
+          ok: "var(--green)",
+          err: "var(--red)",
+          warn: "var(--amber)",
+        };
+        el.textContent = message;
+        el.style.color = colors[type] || colors.info;
+      }
+
+      function sanitizeRole(rawRole) {
+        const role = String(rawRole || "")
+          .trim()
+          .toLowerCase();
+        if (role === "admin" || role === "administrator") return "admin";
+        if (role === "tech" || role === "technician") return "tech";
+        if (role === "client" || role === "customer") return "client";
+        return "";
+      }
+
+      function toPositiveInt(value, fallback) {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+      }
+
+      function getFirebaseRuntimeConfig() {
+        return {
+          enabled: Boolean(API.config.firebase.enabled),
+          apiKey: String(API.config.firebase.apiKey || "").trim(),
+          authDomain: String(API.config.firebase.authDomain || "").trim(),
+          projectId: String(API.config.firebase.projectId || "").trim(),
+          storageBucket: String(API.config.firebase.storageBucket || "").trim(),
+          messagingSenderId: String(
+            API.config.firebase.messagingSenderId || "",
+          ).trim(),
+          appId: String(API.config.firebase.appId || "").trim(),
+          measurementId: String(API.config.firebase.measurementId || "").trim(),
+          usersCollection: String(
+            API.config.firebase.usersCollection || "users",
+          ).trim(),
+        };
+      }
+
+      function validateFirebaseRuntimeConfig(config) {
+        const requiredFields = [
+          "apiKey",
+          "authDomain",
+          "projectId",
+          "storageBucket",
+          "messagingSenderId",
+          "appId",
+        ];
+        const missingFields = requiredFields.filter((field) => !config[field]);
+        return {
+          valid: config.enabled && missingFields.length === 0,
+          missingFields,
+        };
+      }
+
+      async function ensureFirestoreReady() {
+        const config = getFirebaseRuntimeConfig();
+        const validation = validateFirebaseRuntimeConfig(config);
+        if (!validation.valid)
+          throw new Error("Firebase deshabilitado o incompleto");
+        if (!window.firebase?.auth || !window.firebase?.firestore)
+          throw new Error("Firebase SDK no cargado");
+
+        const signature = JSON.stringify(config);
+        if (
+          FIREBASE_RUNTIME.db &&
+          FIREBASE_RUNTIME.auth &&
+          FIREBASE_RUNTIME.signature === signature
+        ) {
+          return {
+            auth: FIREBASE_RUNTIME.auth,
+            db: FIREBASE_RUNTIME.db,
+            storage: FIREBASE_RUNTIME.storage,
+            config,
+          };
+        }
+
+        let firebaseApp;
+        if (!window.firebase.apps.length) {
+          firebaseApp = window.firebase.initializeApp(config);
+        } else {
+          firebaseApp = window.firebase.app();
+        }
+
+        FIREBASE_RUNTIME.app = firebaseApp;
+        FIREBASE_RUNTIME.auth = firebaseApp.auth();
+        FIREBASE_RUNTIME.db = firebaseApp.firestore();
+        if (window.firebase.storage)
+          FIREBASE_RUNTIME.storage = firebaseApp.storage();
+        FIREBASE_RUNTIME.signature = signature;
+        return {
+          auth: FIREBASE_RUNTIME.auth,
+          db: FIREBASE_RUNTIME.db,
+          storage: FIREBASE_RUNTIME.storage,
+          config,
+        };
+      }
+
+      function normalizeFirestoreUser(doc) {
+        const data =
+          typeof doc.data === "function" ? doc.data() : doc.data || {};
+        const role = sanitizeRole(data.role);
+        const name = String(
+          data.name ||
+            data.fullName ||
+            data.displayName ||
+            data.companyName ||
+            "",
+        ).trim();
+        if (!role || !name) return null;
+        return {
+          id: data.id ?? doc.id,
+          name,
+          role,
+          email: String(data.email || "").trim(),
+          phone: String(data.phone || "").trim(),
+          specialty: String(data.specialty || data.position || "").trim(),
+          level: String(data.level || "").trim(),
+          joined: String(
+            data.joined ||
+              data.createdAt ||
+              new Date().toISOString().slice(0, 10),
+          ).slice(0, 10),
+          nit: String(data.nit || "").trim(),
+          city: String(data.city || "").trim(),
+          contact: String(data.contact || "").trim(),
+          tasks_done: toPositiveInt(data.tasks_done, 0),
+          uid: String(data.uid || doc.id).trim(),
+          is_active: data.is_active !== false,
+          baseHours: data.baseHours || 0,
+        };
+      }
+
+      let syncUnsubs = [];
+      async function setupRealtimeListeners() {
+        const { db, config } = await ensureFirestoreReady();
+
+        syncUnsubs.forEach((u) => u());
+        syncUnsubs = [];
+
+        const waitForInit = (query, callback) => {
+          return new Promise((resolve) => {
+            let first = true;
+            const unsub = query.onSnapshot(
+              (snap) => {
+                callback(snap);
+                if (first) {
+                  first = false;
+                  resolve();
+                }
+              },
+              (err) => {
+                console.error("Sync error:", err);
+                if (first) {
+                  first = false;
+                  resolve();
+                } // don't hang init
+              },
+            );
+            syncUnsubs.push(unsub);
+          });
+        };
+
+        const p1 = waitForInit(
+          db.collection(config.usersCollection),
+          (snapshot) => {
+            const users = snapshot.docs
+              .map(normalizeFirestoreUser)
+              .filter(Boolean);
+            API.users = users.length ? users : FALLBACK_USERS;
+            buildSidebar();
+            if (VIEW && ["techs", "clients", "config"].includes(VIEW))
+              nav(VIEW);
+          },
+        );
+
+        const p2 = waitForInit(db.collection("tasks"), (snapshot) => {
+          API.tasks = snapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            .sort((a, b) =>
+              (b.createdAt || "").localeCompare(a.createdAt || ""),
+            );
+          if (
+            VIEW &&
+            [
+              "dashboard",
+              "tasks",
+              "my-tasks",
+              "my-services",
+              "calendar",
+            ].includes(VIEW)
+          )
+            nav(VIEW);
+        });
+
+        const p3 = waitForInit(db.collection("approvals"), (snapshot) => {
+          API.approvals = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          if (VIEW && ["approvals", "c-approvals", "dashboard"].includes(VIEW))
+            nav(VIEW);
+        });
+
+        let p4 = Promise.resolve();
+        if (CU && CU.uid) {
+          p4 = waitForInit(
+            db.collection("notifications").where("uid", "==", CU.uid),
+            (snapshot) => {
+              API.notifications = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              if (VIEW === "notif") nav(VIEW);
+              buildSidebar();
+            },
+          );
+        }
+
+        await Promise.all([p1, p2, p3, p4]);
+      }
+
+      // Stubbed to prevent errors in legacy calls, handled automatically now
+      async function refreshUsersFromFirestore() {}
+      async function refreshTasksFromFirestore() {}
+      async function refreshApprovalsFromFirestore() {}
+      async function refreshNotifsFromFirestore() {}
+
+      async function applyAuthenticatedSession(authUser) {
+        try {
+          console.log("Applying session for:", authUser.email);
+          const { db, config } = await ensureFirestoreReady();
+          let profile;
+
+          // Timeout for firestore get
+          const getWithTimeout = (ref) =>
+            Promise.race([
+              ref.get(),
+              new Promise((_, j) =>
+                setTimeout(
+                  () =>
+                    j(new Error("Tiempo de espera agotado (Firestore Get)")),
+                  8000,
+                ),
+              ),
+            ]);
+
+          const snap = await getWithTimeout(
+            db.collection(config.usersCollection).doc(authUser.uid),
+          );
+
+          if (snap.exists) {
+            profile = normalizeFirestoreUser(snap);
+          } else {
+            const email = authUser.email.toLowerCase();
+            const pre =
+              PREDEFINED_USERS.find((u) => u.email.toLowerCase() === email) ||
+              (email === "wildermangt@gmail.com"
+                ? { name: "Wilderman", role: "admin" }
+                : null);
+            if (pre) {
+              profile = {
+                uid: authUser.uid,
+                name: pre.name,
+                email,
+                role: pre.role,
+                is_active: true,
+                joined: new Date().toISOString().slice(0, 10),
+                phone: "3000000000",
+                tasks_done: 0,
+                baseHours: 48,
+              };
+              await db
+                .collection(config.usersCollection)
+                .doc(authUser.uid)
+                .set(profile);
+            } else {
+              throw new Error("Usuario no autorizado en el sistema.");
+            }
+          }
+
+          if (!profile || !profile.is_active)
+            throw new Error("Usuario inactivo o no encontrado.");
+
+          CU = profile;
+          window.CU = profile;
+
+          console.log("Session successful:", CU.role);
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("app").style.display = "block";
+
+          buildSidebar();
+          buildUserBox();
+          updatePip();
+        } catch (e) {
+          console.error("Session Error:", e);
+          resetSessionView(e.message || "Error desconocido en sesión", "err");
+        }
+      }
+
+      function resetSessionView(msg, type = "info") {
+        CU = null;
+        window.CU = null;
+        document.getElementById("app").style.display = "none";
+        document.getElementById("loginScreen").style.display = "flex";
+        setLoginStatus(msg, type);
+      }
+
+      async function loginPro() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPassword").value;
+        if (!email || !pass) {
+          toast("Campos requeridos", "err");
+          return;
+        }
+        try {
+          setLoginStatus("Autenticando...", "info");
+          const { auth } = await ensureFirestoreReady();
+          await auth.signInWithEmailAndPassword(email, pass);
+        } catch (e) {
+          let m = e.message;
+          if (
+            e.code === "auth/wrong-password" ||
+            e.code === "auth/invalid-credential"
+          )
+            m = "Credenciales inválidas.";
+          setLoginStatus(m, "err");
+          toast(m, "err");
+        }
+      }
+
+      async function logoutPro() {
+        try {
+          if (FIREBASE_RUNTIME.auth) await FIREBASE_RUNTIME.auth.signOut();
+        } catch (e) {}
+        resetSessionView("Sesión cerrada.");
+      }
+
+      /* ═══════════════════════════════════════════════════════
+           UI BUILDERS
+        /* ═══════════════════════════════════════════════════════ */
+
+      function buildSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const cfg = API.config;
+        const sections = [
+          {
+            id: "dashboard",
+            ico: "⬡",
+            label: "Panel Principal",
+            roles: ["admin", "tech", "client"],
+          },
+          {
+            id: "tasks",
+            ico: "◈",
+            label: "Gestión de Tareas",
+            roles: ["admin"],
+          },
+          {
+            id: "approvals",
+            ico: "◎",
+            label: "Aprobaciones",
+            roles: ["admin", "client"],
+          },
+          { id: "techs", ico: "◉", label: "Técnicos", roles: ["admin"] },
+          { id: "clients", ico: "⬟", label: "Clientes", roles: ["admin"] },
+          {
+            id: "calendar",
+            ico: "📅",
+            label: "Calendario",
+            roles: ["admin", "tech"],
+          },
+          { id: "config", ico: "◧", label: "Configuración", roles: ["admin"] },
+        ];
+
+        const logoHtml = cfg.logoUrl
+          ? `<img src="${cfg.logoUrl}" style="width:32px;height:32px;object-fit:contain;margin-right:10px;border-radius:4px">`
+          : `<div class="sb-cube" style="background:${cfg.primaryColor || "#6366f1"}">${(cfg.company || "SV")[0].toUpperCase()}</div>`;
+
+        sidebar.innerHTML = `
+            <div class="sb-head">
+              ${logoHtml}
+              <div style="flex:1">
+                <div class="sb-brand">${cfg.company?.split(".")[0] || "SV"}.<span>${cfg.company?.split(".")[1] || "Services"}</span></div>
+                <div class="sb-ver">${cfg.slogan || "Gestión de servicios"}</div>
+              </div>
+            </div>
+            <nav class="sb-nav" id="sbNav">
+              ${sections
+                .filter((s) => s.roles.includes(CU.role))
+                .map(
+                  (s) => `
+                <div class="sb-item ${VIEW === s.id ? "active" : ""}" id="sb-${s.id}" onclick="nav('${s.id}')">
+                  <span class="sb-ico">${s.ico}</span> ${s.label}
+                </div>
+              `,
+                )
+                .join("")}
+            </nav>
+            <div class="sb-foot">
+                <div class="sb-user" id="sbUser"></div>
+                <button class="sb-logout" onclick="logoutPro()">Cerrar Sesión</button>
+            </div>`;
+        buildUserBox();
+      }
+
+      function buildUserBox() {
+        const bg = H.aColor(CU.name);
+        const roles = {
+          admin: "Administrador",
+          tech: "Técnico",
+          client: "Cliente",
+        };
+        const el = document.getElementById("sbUser");
+        if (!el) return;
+        el.innerHTML = `
+            <div class="ava ava-sm" style="background:${bg}22;color:${bg};border:1.5px solid ${bg}44">${H.ini(CU.name)}</div>
+            <div style="flex:1;min-width:0">
+              <div class="sb-uname">${CU.name.split(" ")[0]}</div>
+              <div class="sb-urole">${roles[CU.role]}</div>
+            </div>`;
+      }
+
+      function updatePip() {
+        const pip = document.getElementById("notifPip");
+        if (pip) pip.style.display = H.unread() > 0 ? "block" : "none";
+      }
+
+      function toggleSidebar(close = false) {
+        const sb = document.getElementById("sidebar");
+        const ov = document.getElementById("sidebarOverlay");
+        if (close) {
+          sb.classList.remove("open");
+          ov.classList.remove("open");
+          return;
+        }
+        sb.classList.toggle("open");
+        ov.classList.toggle("open");
+      }
+
+      function nav(view, title) {
+        VIEW = view;
+        document
+          .querySelectorAll(".sb-item")
+          .forEach((el) => el.classList.remove("active"));
+        const el = document.getElementById("sb-" + view);
+        if (el) el.classList.add("active");
+
+        const titles = {
+          dashboard: "Panel Principal",
+          tasks: "Gestión de Tareas",
+          techs: "Técnicos",
+          clients: "Clientes",
+          approvals: "Solicitudes de Aprobación",
+          reports: "Reportes",
+          config: "Configuración",
+          "my-tasks": "Mis Tareas",
+          "my-services": "Mis Servicios",
+          "c-approvals": "Aprobaciones Pendientes",
+          notif: "Notificaciones",
+          "tech-docs": "Documentos",
+          calendar: "Calendario",
+          hours: "Control de Horas",
+        };
+        document.getElementById("tbTitle").textContent =
+          title || titles[view] || view;
+        document.getElementById("tbSub").textContent =
+          `${CU.name} · ${new Date().toLocaleDateString("es-CO", { weekday: "long", day: "numeric", month: "long" })}`;
+
+        const mc = document.getElementById("mainContent");
+        mc.innerHTML =
+          '<div style="display:flex;align-items:center;justify-content:center;height:200px;color:var(--t3)">Cargando sección...</div>';
+
+        const fns = {
+          dashboard: renderDash,
+          tasks: renderTasks,
+          techs: renderTechs,
+          clients: renderClients,
+          approvals: renderApprovals,
+          reports: renderReports,
+          config: renderConfig,
+          "my-tasks": renderMyTasks,
+          "my-services": renderMyServices,
+          "c-approvals": renderCApprovals,
+          notif: renderNotif,
+          "tech-docs": renderTechDocs,
+          calendar: renderCalendar,
+          hours: renderHours,
+        };
+        if (fns[view]) fns[view]();
+        if (window.innerWidth <= 768) toggleSidebar(true);
+      }
+
+      /* ══════════════════════════════════════════════════════
+           RENDER FUNCTIONS
+        /* ══════════════════════════════════════════════════════ */
+
+      function renderDash() {
+        const mc = document.getElementById("mainContent");
+        if (CU.role === "admin") renderAdminDash(mc);
+        else if (CU.role === "tech") renderTechDash(mc);
+        else renderClientDash(mc);
+      }
+
+      function renderAdminDash(mc) {
+        const total = API.tasks.length,
+          done = API.tasks.filter((t) => t.status === "done").length,
+          active = API.tasks.filter((t) => t.status === "inprogress").length;
+        const rev = API.tasks.reduce((a, t) => a + (t.cost || 0), 0);
+        mc.innerHTML = `
+          <div class="pg-head">
+            <div><div class="pg-h">Panel de Control</div><div class="pg-sub">Resumen operativo general</div></div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-ghost" onclick="runReseed()">🔄 Restaurar Datos</button>
+              <button class="btn btn-brand" onclick="openNewTask()">+ Nueva Tarea</button>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">${total}</div><div class="stat-lbl">Tareas totales</div><div class="stat-bar"><div class="stat-bar-fill" style="width:100%;background:var(--brand)"></div></div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--green)">${done}</div><div class="stat-lbl">Finalizadas</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.round((done / total) * 100) || 0}%;background:var(--green)"></div></div></div>
+            <div class="stat"><div class="stat-val">${H.clients().length}</div><div class="stat-lbl">Clientes activos</div><div class="stat-bar"><div class="stat-bar-fill" style="width:100%;background:var(--amber)"></div></div></div>
+            <div class="stat"><div class="stat-val" style="font-size:18px;color:var(--green)">${H.fmt(rev)}</div><div class="stat-lbl">Valor servicios</div><div class="stat-bar"><div class="stat-bar-fill" style="width:100%;background:var(--purple)"></div></div></div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:14px">Tareas recientes</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th>Servicio</th><th>Cliente</th><th>Técnico</th><th>Estado</th></tr></thead>
+                <tbody>${API.tasks
+                  .slice(0, 5)
+                  .map((t) => {
+                    const cl = H.byId(t.clientId),
+                      tc = H.byId(t.techId);
+                    return `<tr onclick="openTaskDetail('${t.id}')" style="cursor:pointer">
+                    <td>${t.title}</td><td>${cl?.name || "—"}</td><td>${tc?.name?.split(" ")[0] || "—"}</td><td>${H.sb(t.status)}</td>
+                  </tr>`;
+                  })
+                  .join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+      }
+
+      function renderTechDash(mc) {
+        const mt = H.tTasks(CU.uid);
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Mi Panel</div><div class="pg-sub">${CU.specialty}</div></div></div>
+          <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+            <div class="stat"><div class="stat-val">${mt.length}</div><div class="stat-lbl">Asignadas</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--blue)">${mt.filter((t) => t.status === "inprogress").length}</div><div class="stat-lbl">En progreso</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--green)">${mt.filter((t) => t.status === "done").length}</div><div class="stat-lbl">Completadas</div></div>
+          </div>
+          <div style="font-weight:700;margin-bottom:12px">Tareas activas</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+            ${
+              mt
+                .filter((t) => t.status !== "done")
+                .map(renderTaskCard)
+                .join("") || '<div class="empty">Sin tareas activas</div>'
+            }
+          </div>`;
+      }
+
+      function renderClientDash(mc) {
+        const mt = H.cTasks(CU.uid);
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">${CU.name}</div><div class="pg-sub">Mis servicios contratados</div></div></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+            ${mt.map(renderTaskCard).join("") || '<div class="empty">Sin servicios contratados</div>'}
+          </div>`;
+      }
+
+      function renderTaskCard(t) {
+        const pc = H.prColor(t.priority);
+        return `<div class="task-card" onclick="openTaskDetail('${t.id}')" style="border-left:3px solid ${pc}">
+            <div class="tc-h"><div class="tc-title">${t.title}</div>${H.sb(t.status)}</div>
+            <div class="tc-desc">${t.desc}</div>
+            <div class="prog-track"><div class="prog-fill" style="width:${t.progress}%;background:${H.pc(t.progress)}"></div></div>
+            <div class="tc-foot" style="margin-top:10px"><span>📅 ${t.estimatedDate}</span><span>${t.progress}%</span></div>
+          </div>`;
+      }
+
+      function renderTasks() {
+        const mc = document.getElementById("mainContent");
+        mc.innerHTML = `
+          <div class="pg-head">
+            <div><div class="pg-h">Gestión de Tareas</div><div class="pg-sub">${API.tasks.length} servicios</div></div>
+            <button class="btn btn-brand" onclick="openNewTask()">+ Nueva Tarea</button>
+          </div>
+          <div id="tasksGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+            ${API.tasks.map(renderTaskCard).join("")}
+          </div>`;
+      }
+
+      function renderTechs() {
+        const mc = document.getElementById("mainContent");
+        const techs = H.techs();
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Técnicos</div><div class="pg-sub">${techs.length} registrados</div></div><button class="btn btn-brand" onclick="openUserModal('tech')">+ Nuevo Técnico</button></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Técnico</th><th>Especialidad</th><th>Nivel</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody>${techs
+            .map(
+              (
+                t,
+              ) => `<tr><td>${t.name}</td><td>${t.specialty}</td><td>${t.level}</td><td>${t.is_active ? "Activo" : "Inactivo"}</td><td>
+            <div style="display:flex;gap:5px">
+              <button class="btn btn-ghost btn-xs" onclick="editUser('${t.uid}')">✏️</button>
+              <button class="btn btn-ghost btn-xs" onclick="deleteUser('${t.uid}')" style="color:var(--red)">🗑️</button>
+            </div>
+          </td></tr>`,
+            )
+            .join("")}</tbody>
+          </table></div>`;
+      }
+
+      function renderClients() {
+        const mc = document.getElementById("mainContent");
+        const clients = H.clients();
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Clientes</div><div class="pg-sub">${clients.length} registrados</div></div><button class="btn btn-brand" onclick="openUserModal('client')">+ Nuevo Cliente</button></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Cliente</th><th>NIT</th><th>Ciudad</th><th>Contacto</th><th>Teléfono</th><th>Correo</th><th>Acciones</th></tr></thead>
+          <tbody>${clients
+            .map(
+              (
+                c,
+              ) => `<tr><td>${c.name}</td><td>${c.nit}</td><td>${c.city}</td><td>${c.contact}</td><td>${c.phone || "—"}</td><td>${c.email || "—"}</td><td>
+            <div style="display:flex;gap:5px">
+              <button class="btn btn-ghost btn-xs" onclick="editUser('${c.uid}')">✏️</button>
+              <button class="btn btn-ghost btn-xs" onclick="deleteUser('${c.uid}')" style="color:var(--red)">🗑️</button>
+            </div>
+          </td></tr>`,
+            )
+            .join("")}</tbody>
+          </table></div>`;
+      }
+
+      function renderApprovals() {
+        const mc = document.getElementById("mainContent");
+        const apps = API.approvals.filter((a) =>
+          CU.role === "admin" ? true : a.status === "pending",
+        );
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Aprobaciones</div><div class="pg-sub">${apps.length} solicitudes</div></div></div>
+          ${
+            apps.length
+              ? `<div class="tbl-wrap"><table><thead><tr><th>Tarea</th><th>Tipo</th><th>Novedad</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody>${apps
+            .map(
+              (
+                a,
+              ) => `<tr><td>${H.task(a.taskId)?.title || "Tarea"}</td><td>${a.type}</td><td title="${a.novelty}">${a.novelty?.slice(0, 30)}...</td><td>${H.sb(a.status)}</td><td>
+            <div style="display:flex;gap:5px">
+              <button class="btn btn-brand btn-xs" onclick="viewApproval('${a.id}')">Ver</button>
+              ${CU.role === "admin" ? `<button class="btn btn-ghost btn-xs" onclick="deleteApproval('${a.id}')" style="color:var(--red)">🗑️</button>` : ""}
+            </div>
+          </td></tr>`,
+            )
+            .join("")}</tbody>
+          </table></div>`
+              : '<div class="empty">No hay aprobaciones pendientes</div>'
+          }`;
+      }
+
+      function renderReports() {
+        const mc = document.getElementById("mainContent");
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Reportes</div><div class="pg-sub">Estadísticas de la plataforma</div></div></div>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-val">${API.tasks.length}</div><div class="stat-lbl">Servicios Totales</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--green)">${API.tasks.filter((t) => t.status === "done").length}</div><div class="stat-lbl">Completados</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--amber)">${API.tasks.filter((t) => t.status === "pending").length}</div><div class="stat-lbl">Pendientes</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--blue)">${H.techs().length}</div><div class="stat-lbl">Técnicos</div></div>
+          </div>
+          <div class="card"><div style="font-weight:700;margin-bottom:12px">Distribución de estados</div><div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--t4)">[ Gráfico de rendimiento ]</div></div>`;
+      }
+
+      function renderMyTasks() {
+        renderTechDash(document.getElementById("mainContent"));
+      }
+      function renderMyServices() {
+        renderClientDash(document.getElementById("mainContent"));
+      }
+      function renderCApprovals() {
+        renderApprovals();
+      }
+      function renderNotif() {
+        const mc = document.getElementById("mainContent");
+        const ns = H.myNotifs();
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Notificaciones</div><div class="pg-sub">${ns.length} mensajes</div></div></div>
+          <div class="tl">${
+            ns
+              .map(
+                (n) => `
+            <div class="tl-item">
+              <div class="tl-dot ${n.read ? "" : "live"}"></div>
+              <div class="tl-lbl">${n.title}</div>
+              <div class="tl-date">${n.time}</div>
+              <div class="tl-note">${n.body}</div>
+            </div>
+          `,
+              )
+              .join("") || '<div class="empty">Sin notificaciones</div>'
+          }</div>`;
+      }
+
+      function renderTechDocs() {
+        const mc = document.getElementById("mainContent");
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Documentos</div><div class="pg-sub">Guías y manuales técnicos</div></div></div>
+          <div class="docs-file-grid">
+            <div class="doc-file-card"><div class="doc-file-ico">📄</div><div class="doc-file-name">Manual_Instalacion_v2.pdf</div><div class="doc-file-meta">2.4 MB · PDF</div></div>
+            <div class="doc-file-card"><div class="doc-file-ico">🖼</div><div class="doc-file-name">Diagrama_Red_Principal.png</div><div class="doc-file-meta">1.1 MB · Imagen</div></div>
+          </div>`;
+      }
+
+      function renderCalendar() {
+        const mc = document.getElementById("mainContent");
+        const year = currentCalendarDate.getFullYear(),
+          month = currentCalendarDate.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Adjust firstDay (0 is Sunday, we want 0 as Monday)
+        const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+        // Festivos Colombia 2026 (Fechas fijas y trasladadas)
+        const colHolidays = [
+          "01-01",
+          "01-12",
+          "03-23",
+          "04-02",
+          "04-03",
+          "05-01",
+          "05-18",
+          "06-08",
+          "06-15",
+          "06-29",
+          "07-20",
+          "08-07",
+          "08-17",
+          "10-12",
+          "11-02",
+          "11-16",
+          "12-08",
+          "12-25",
+        ];
+
+        mc.innerHTML = `<div class="pg-head">
+          <div><div class="pg-h">Calendario</div><div class="pg-sub">${currentCalendarDate.toLocaleString("es-ES", { month: "long", year: "numeric" }).toUpperCase()}</div></div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-ghost" onclick="changeMonth(-1)">&#9664; Anterior</button>
+            <button class="btn btn-ghost" onclick="changeMonth(1)">Siguiente &#9654;</button>
+          </div>
+        </div>
+          <div class="card"><div class="cal-grid">
+            <div class="cal-dow">Lun</div><div class="cal-dow">Mar</div><div class="cal-dow">Mie</div><div class="cal-dow">Jue</div><div class="cal-dow">Vie</div><div class="cal-dow">Sab</div><div class="cal-dow" style="color:var(--red);">Dom</div>
+            ${Array.from({ length: startOffset })
+              .map(() => `<div class="cal-cell empty"></div>`)
+              .join("")}
+            ${Array.from({ length: daysInMonth })
+              .map((_, i) => {
+                const day = i + 1;
+                const mStr = String(month + 1).padStart(2, "0");
+                const dStr = String(day).padStart(2, "0");
+                const dateStr = `${year}-${mStr}-${dStr}`;
+                const dayOfWeek = new Date(year, month, day).getDay();
+
+                const isSunday = dayOfWeek === 0;
+                const isHoliday = colHolidays.includes(`${mStr}-${dStr}`);
+
+                const isOffDay = isSunday || isHoliday;
+                const cellStyle = isOffDay ? "background: #fff0f0;" : "";
+                const numStyle = isOffDay ? "color: var(--red);" : "";
+
+                const dayTasks = API.tasks.filter(
+                  (t) => t.estimatedDate === dateStr,
+                );
+                return `<div class="cal-cell" style="${cellStyle}" onclick="if(event.target===this)openNewTask('${dateStr}')">
+                <div class="cal-day-num" style="${numStyle}">${day}${isHoliday ? " 🎈" : ""}</div>
+                ${dayTasks
+                  .map((t) => {
+                    const tech = H.byId(t.techId);
+                    return `<div class="cal-dot" onclick="event.stopPropagation();openTaskDetail('${t.id}')" style="background:${H.prColor(t.priority)}22;color:${H.prColor(t.priority)};border:1px solid ${H.prColor(t.priority)}44;padding:4px;border-radius:4px;margin-bottom:4px;font-size:10px;line-height:1.2;">
+                    <strong>${t.title}</strong><br/>
+                    ${tech ? `👨‍🔧 ${tech.name.split(" ")[0]}` : "Sin asignar"}
+                    </div>`;
+                  })
+                  .join("")}
+              </div>`;
+              })
+              .join("")}
+          </div></div>`;
+      }
+
+      function changeMonth(delta) {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+        renderCalendar();
+      }
+
+      async function cleanOrphanTasks() {
+        if (
+          !confirm(
+            "¿Estás seguro de eliminar todas las tareas que no tienen técnico asignado?",
+          )
+        )
+          return;
+        try {
+          const { db } = await ensureFirestoreReady();
+          const orphans = API.tasks.filter((t) => !H.byId(t.techId));
+          if (orphans.length === 0) {
+            toast("No hay tareas huérfanas", "ok");
+            return;
+          }
+          const batch = db.batch();
+          orphans.forEach((t) =>
+            batch.delete(db.collection("tasks").doc(t.id)),
+          );
+          await batch.commit();
+          toast(`${orphans.length} tareas eliminadas`, "ok");
+          refreshTasksFromFirestore();
+        } catch (e) {
+          toast("Error al limpiar tareas", "err");
+        }
+      }
+
+      function renderHours() {
+        const mc = document.getElementById("mainContent");
+        const total = CU.baseHours || 48;
+        const used = Math.round(Math.random() * 20) + 10;
+        mc.innerHTML = `<div class="pg-head"><div><div class="pg-h">Control de Horas</div><div class="pg-sub">Seguimiento de jornada laboral</div></div></div>
+          <div class="stats-row" style="grid-template-columns:repeat(2,1fr)">
+            <div class="stat"><div class="stat-val">${total}h</div><div class="stat-lbl">Base Semanal</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--brand)">${used}h</div><div class="stat-lbl">Registradas</div></div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700;margin-bottom:12px">Registro de hoy</div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <input type="number" class="fi" placeholder="Horas" style="width:100px">
+              <input type="text" class="fi" placeholder="Actividad realizada">
+              <button class="btn btn-brand" onclick="toast('Horas registradas','ok')">Registrar</button>
+            </div>
+          </div>`;
+      }
+
+      function openUserModal(role) {
+        const title = role === "tech" ? "Nuevo Técnico" : "Nuevo Cliente";
+        showModal(`
+            <div class="modal-h">${title}</div>
+            <div class="fg"><label class="fl">Nombre Completo / Razón Social</label><input class="fi" id="nu-name"></div>
+            <div class="fg"><label class="fl">Correo Electrónico</label><input class="fi" id="nu-email"></div>
+            <div class="fg"><label class="fl">Teléfono</label><input class="fi" id="nu-phone"></div>
+            ${
+              role === "tech"
+                ? `
+              <div class="fg"><label class="fl">Especialidad</label><input class="fi" id="nu-spec"></div>
+              <div class="fg"><label class="fl">Nivel</label><select class="fs" id="nu-level"><option>Junior</option><option>Senior</option><option>Especialista</option></select></div>
+            `
+                : `
+              <div class="fg"><label class="fl">Contacto Principal</label><input class="fi" id="nu-contact"></div>
+              <div class="fg"><label class="fl">NIT / Identificación</label><input class="fi" id="nu-nit"></div>
+              <div class="fg"><label class="fl">Ciudad</label><input class="fi" id="nu-city"></div>
+            `
+            }
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+              <button class="btn btn-brand" onclick="createUser('${role}')">Guardar</button>
+            </div>
+          `);
+      }
+
+      async function createUser(role) {
+        const email = document.getElementById("nu-email").value;
+        const name = document.getElementById("nu-name").value;
+        const phone = document.getElementById("nu-phone").value;
+
+        if (!email || !name) {
+          toast("Campos requeridos", "err");
+          return;
+        }
+
+        try {
+          const { db } = await ensureFirestoreReady();
+          const uid = "u_" + Date.now(); // Temp ID, usually from Auth
+          const userDoc = {
+            uid,
+            name,
+            email,
+            phone,
+            role,
+            is_active: true,
+            joined: new Date().toISOString().slice(0, 10),
+          };
+          if (role === "tech") {
+            userDoc.specialty = document.getElementById("nu-spec").value;
+            userDoc.level = document.getElementById("nu-level").value;
+            userDoc.tasks_done = 0;
+          } else {
+            userDoc.contact = document.getElementById("nu-contact").value;
+            userDoc.nit = document.getElementById("nu-nit").value;
+            userDoc.city = document.getElementById("nu-city").value;
+          }
+          await db.collection("users").doc(uid).set(userDoc);
+          toast("Usuario creado exitosamente", "ok");
+          closeModal();
+          // Sync is automatic via onSnapshot
+        } catch (e) {
+          console.error(e);
+          toast("Error al crear usuario", "err");
+        }
+      }
+
+      function renderConfig() {
+        const mc = document.getElementById("mainContent");
+        const cfg = API.config;
+        let activeTab = "general";
+
+        const draw = () => {
+          mc.innerHTML = `
+            <div class="pg-head">
+              <div><div class="pg-h">Configuración del Sistema</div><div class="pg-sub">Gestión administrativa y personalización</div></div>
+              <button class="btn btn-brand" onclick="saveConfig()">💾 Guardar Cambios</button>
+            </div>
+            
+            <div class="tabs-nav cfg-tabs" style="margin-bottom:20px;">
+              <button class="cfg-tab ${activeTab === "general" ? "active" : ""}" onclick="cfgTab('general')">Software</button>
+              <button class="cfg-tab ${activeTab === "social" ? "active" : ""}" onclick="cfgTab('social')">Redes Sociales</button>
+              <button class="cfg-tab ${activeTab === "users" ? "active" : ""}" onclick="cfgTab('users')">Usuarios</button>
+            </div>
+
+            <div id="cfgContent"></div>`;
+
+          const cc = document.getElementById("cfgContent");
+          if (activeTab === "general") {
+            cc.innerHTML = `
+              <div class="cfg-layout">
+                <div class="card">
+                  <div class="fsection">Identidad Visual</div>
+                  <div class="fg"><label class="fl">Nombre del Software</label><input class="fi" id="cfg-company" value="${cfg.company || ""}"></div>
+                  <div class="fg"><label class="fl">Color Principal</label><input class="fi" type="color" id="cfg-color" value="${cfg.primaryColor || "#6366f1"}"></div>
+                  <div class="fg"><label class="fl">Eslogan / Actividad</label><input class="fi" id="cfg-slogan" value="${cfg.slogan || ""}"></div>
+                  <div class="fg"><label class="fl">Logo de la Empresa</label>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                      ${cfg.logoUrl ? `<img src="${cfg.logoUrl}" style="height:50px;object-fit:contain;background:#f5f5f5;padding:5px;border-radius:4px;">` : "<span>Sin logo</span>"}
+                    </div>
+                    <label class="fl">Subir Nuevo Logo (Imagen)</label>
+                    <input type="file" id="cfg-logo-file" class="fi" accept="image/*">
+                    <input type="hidden" id="cfg-logoUrl" value="${cfg.logoUrl || ""}">
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="fsection">Infraestructura (Firebase)</div>
+                  <div class="fg"><label class="fl">Project ID</label><input class="fi" id="cfg-fb-id" value="${cfg.firebase.projectId}"></div>
+                  <div class="fg"><label class="fl">API Key</label><input class="fi" id="cfg-fb-key" value="${cfg.firebase.apiKey}"></div>
+                </div>
+              </div>`;
+          } else if (activeTab === "social") {
+            cc.innerHTML = `
+              <div class="card" style="max-width:600px">
+                <div class="fsection">Perfiles Sociales</div>
+                <div class="fg"><label class="fl">Facebook</label><input class="fi" id="cfg-fb" value="${cfg.facebook || ""}" placeholder="https://facebook.com/..."></div>
+                <div class="fg"><label class="fl">Instagram</label><input class="fi" id="cfg-ig" value="${cfg.instagram || ""}" placeholder="https://instagram.com/..."></div>
+                <div class="fg"><label class="fl">Twitter / X</label><input class="fi" id="cfg-tw" value="${cfg.twitter || ""}" placeholder="https://twitter.com/..."></div>
+                <div class="fg"><label class="fl">LinkedIn</label><input class="fi" id="cfg-li" value="${cfg.linkedin || ""}" placeholder="https://linkedin.com/company/..."></div>
+              </div>`;
+          } else if (activeTab === "users") {
+            cc.innerHTML = `
+              <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+                  <div style="font-weight:700">Listado de Usuarios</div>
+                  <button class="btn btn-brand btn-xs" onclick="openUserModal('tech')">+ Nuevo Usuario</button>
+                </div>
+                <div class="tbl-wrap">
+                  <table>
+                    <thead><tr><th>Usuario</th><th>Rol</th><th>Correo</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>${API.users
+                      .map(
+                        (u) => `
+                      <tr>
+                        <td><div style="font-weight:600">${u.name}</div><div style="font-size:10px;color:var(--t4)">${u.uid}</div></td>
+                        <td><span class="badge">${u.role}</span></td>
+                        <td>${u.email}</td>
+                        <td>${u.is_active ? '<span style="color:var(--green)">● Activo</span>' : '<span style="color:var(--red)">● Inactivo</span>'}</td>
+                        <td>
+                          <div style="display:flex;gap:5px">
+                            <button class="btn btn-ghost btn-xs" onclick="editUser('${u.uid}')">✏️</button>
+                            <button class="btn btn-ghost btn-xs" onclick="toggleUserStatus('${u.uid}', ${!u.is_active})">${u.is_active ? "🚫" : "✅"}</button>
+                            <button class="btn btn-ghost btn-xs" onclick="deleteUser('${u.uid}')" style="color:var(--red)">🗑️</button>
+                          </div>
+                        </td>
+                      </tr>`,
+                      )
+                      .join("")}
+                    </tbody>
+                  </table>
+                </div>
+              </div>`;
+          }
+        };
+
+        window.cfgTab = (t) => {
+          activeTab = t;
+          draw();
+        };
+        draw();
+      }
+
+      async function toggleUserStatus(uid, status) {
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("users").doc(uid).update({ is_active: status });
+          toast(`Usuario ${status ? "activado" : "desactivado"}`, "ok");
+          await refreshUsersFromFirestore();
+          renderConfig();
+          cfgTab("users");
+        } catch (e) {
+          toast("Error al cambiar estado", "err");
+        }
+      }
+
+      async function deleteUser(uid) {
+        if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("users").doc(uid).delete();
+          toast("Usuario eliminado", "ok");
+          await refreshUsersFromFirestore();
+          renderConfig();
+          cfgTab("users");
+        } catch (e) {
+          toast("Error al eliminar", "err");
+        }
+      }
+
+      function editUser(uid) {
+        const u = API.users.find((x) => x.uid === uid);
+        if (!u) return;
+        showModal(`
+            <div class="modal-h">Editar Usuario</div>
+            <div class="fg"><label class="fl">Nombre / Razón Social</label><input class="fi" id="ed-name" value="${u.name}"></div>
+            <div class="fg"><label class="fl">Teléfono</label><input class="fi" id="ed-phone" value="${u.phone || ""}"></div>
+            <div class="fg"><label class="fl">Rol</label>
+              <select class="fs" id="ed-role">
+                <option value="admin" ${u.role === "admin" ? "selected" : ""}>Administrador</option>
+                <option value="tech" ${u.role === "tech" ? "selected" : ""}>Técnico</option>
+                <option value="client" ${u.role === "client" ? "selected" : ""}>Cliente</option>
+              </select>
+            </div>
+            ${
+              u.role === "client"
+                ? `
+              <div class="fg"><label class="fl">Contacto</label><input class="fi" id="ed-contact" value="${u.contact || ""}"></div>
+              <div class="fg"><label class="fl">NIT</label><input class="fi" id="ed-nit" value="${u.nit || ""}"></div>
+              <div class="fg"><label class="fl">Ciudad</label><input class="fi" id="ed-city" value="${u.city || ""}"></div>
+            `
+                : ""
+            }
+            <div class="fg"><label class="fl">Nueva Contraseña (Opcional)</label><input class="fi" type="password" id="ed-pass" placeholder="Dejar vacío para no cambiar"></div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+              <button class="btn btn-brand" onclick="updateUser('${uid}')">Actualizar</button>
+            </div>
+          `);
+      }
+
+      async function updateUser(uid) {
+        const u = API.users.find((x) => x.uid === uid);
+        const name = document.getElementById("ed-name").value;
+        const role = document.getElementById("ed-role").value;
+        const phone = document.getElementById("ed-phone").value;
+        const pass = document.getElementById("ed-pass").value;
+
+        let updates = { name, role, phone };
+        if (u.role === "client") {
+          updates.contact = document.getElementById("ed-contact")?.value || "";
+          updates.nit = document.getElementById("ed-nit")?.value || "";
+          updates.city = document.getElementById("ed-city")?.value || "";
+        }
+
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("users").doc(uid).update(updates);
+          if (pass)
+            toast(
+              "Nota: El cambio de contraseña requiere Firebase Admin. Perfil actualizado.",
+              "info",
+            );
+          else toast("Usuario actualizado", "ok");
+          closeModal();
+          // Sync is automatic
+        } catch (e) {
+          toast("Error al actualizar", "err");
+        }
+      }
+
+      async function saveConfig() {
+        const c = API.config;
+        const btn = event.target;
+        const origText = btn.textContent;
+        btn.textContent = "Guardando...";
+        btn.disabled = true;
+
+        // General
+        if (document.getElementById("cfg-company")) {
+          c.company = document.getElementById("cfg-company").value;
+          c.primaryColor = document.getElementById("cfg-color").value;
+          c.slogan = document.getElementById("cfg-slogan").value;
+
+          const fileInput = document.getElementById("cfg-logo-file");
+          if (fileInput && fileInput.files.length > 0) {
+            try {
+              const { storage } = await ensureFirestoreReady();
+              const file = fileInput.files[0];
+              const safeName = file.name
+                .replace(/[^a-z0-9.]/gi, "_")
+                .toLowerCase();
+              const ref = storage.ref(`config/${Date.now()}_${safeName}`);
+              await ref.put(file);
+              c.logoUrl = await ref.getDownloadURL();
+            } catch (e) {
+              console.error(e);
+              toast("Error al subir logo", "err");
+            }
+          } else {
+            c.logoUrl = document.getElementById("cfg-logoUrl").value;
+          }
+        }
+        // Social
+        if (document.getElementById("cfg-fb")) {
+          c.social = {
+            facebook: document.getElementById("cfg-fb").value,
+            instagram: document.getElementById("cfg-ig").value,
+            twitter: document.getElementById("cfg-tw").value,
+            linkedin: document.getElementById("cfg-li").value,
+          };
+        }
+
+        persistConfig();
+        // Apply theme color and update UI
+        document.documentElement.style.setProperty("--brand", c.primaryColor);
+        buildSidebar();
+        toast("Configuración guardada exitosamente", "ok");
+
+        btn.textContent = origText;
+        btn.disabled = false;
+        if (VIEW === "config") {
+          renderConfig();
+          cfgTab("general");
+        }
+      }
+
+      /* ═══════════════════════════════════════════════════════
+           MODALS & INTERACTIONS
+        /* ═══════════════════════════════════════════════════════ */
+
+      function viewApproval(aid) {
+        const a = API.approvals.find((x) => x.id === aid);
+        if (!a) return;
+        const t = H.task(a.taskId);
+        showModal(`
+            <div class="modal-h">Detalle de Aprobación</div>
+            <div class="fg"><label class="fl">Tipo de Requerimiento</label><div><b>${a.type}</b></div></div>
+            <div class="fg"><label class="fl">Tarea Relacionada</label><div>${t?.title || "—"}</div></div>
+            <div class="fg"><label class="fl">Novedad / Justificación</label><div style="background:var(--bg-float);padding:10px;border-radius:var(--r8);font-style:italic">"${a.novelty || "Sin mensaje"}"</div></div>
+            <div class="fg"><label class="fl">Costo Estimado</label><div style="color:var(--green);font-weight:700">$${H.fmt(a.cost)}</div></div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cerrar</button>
+              ${
+                CU.role === "admin" && a.status === "pending"
+                  ? `
+                <button class="btn btn-danger" onclick="resolveApproval('${a.id}', 'rejected')">Rechazar</button>
+                <button class="btn btn-brand" onclick="resolveApproval('${a.id}', 'approved')">Aprobar Solicitud</button>
+              `
+                  : ""
+              }
+            </div>
+          `);
+      }
+
+      async function resolveApproval(aid, status) {
+        try {
+          const { db } = await ensureFirestoreReady();
+          const a = API.approvals.find((x) => x.id === aid);
+          await db.collection("approvals").doc(aid).update({ status });
+          if (status === "approved" && a) {
+            await db
+              .collection("tasks")
+              .doc(a.taskId)
+              .update({ status: "done", progress: 100 });
+          }
+          toast(
+            `Solicitud ${status === "approved" ? "aprobada" : "rechazada"}`,
+            "ok",
+          );
+          closeModal();
+          refreshApprovalsFromFirestore();
+          refreshTasksFromFirestore();
+        } catch (e) {
+          toast("Error al procesar", "err");
+        }
+      }
+
+      async function deleteApproval(aid) {
+        if (!confirm("¿Eliminar esta aprobación permanentemente?")) return;
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("approvals").doc(aid).delete();
+          toast("Aprobación eliminada", "ok");
+          refreshApprovalsFromFirestore();
+        } catch (e) {
+          toast("Error al eliminar", "err");
+        }
+      }
+
+      function openTaskDetail(tid) {
+        const t = H.task(tid);
+        if (!t) return;
+        const isAdmin = CU.role === "admin";
+        const cl = H.byId(t.clientId),
+          tc = H.byId(t.techId);
+        const attList = (t.attachments || [])
+          .map(
+            (a) => `
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-float);padding:8px 12px;border-radius:4px;margin-bottom:6px;font-size:12px;border:1px solid var(--line);">
+                <a href="${a.url}" target="_blank" style="color:var(--brand-light);text-decoration:none;display:flex;align-items:center;gap:6px;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                  <span>📎</span> ${a.name}
+                </a>
+                ${isAdmin || CU.uid === t.techId ? `<button class="btn btn-xs btn-danger" style="margin-left:8px;" onclick="deleteAttachment('${t.id}', '${a.url}')">✕</button>` : ""}
+              </div>
+            `,
+          )
+          .join("");
+
+        const attHTML = `
+              <div class="fg" style="margin-top:16px;">
+                <label class="fl">Archivos Adjuntos</label>
+                <div id="att-list">${attList || '<div style="color:var(--t4);font-size:11px;margin-bottom:8px;">Sin adjuntos</div>'}</div>
+                <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+                  <input type="file" id="edt-file" style="flex:1;background:var(--bg-float);color:var(--t1);border:1px solid var(--line-mid);border-radius:var(--r8);padding:6px;font-size:12px;" accept="image/*,.pdf,.doc,.docx" ${isAdmin || CU.uid === t.techId ? "" : "disabled"}>
+                  <button class="btn btn-sm btn-brand" onclick="uploadAttachment('${t.id}')" ${isAdmin || CU.uid === t.techId ? "" : "disabled"}>Subir</button>
+                </div>
+              </div>
+            `;
+
+        showModal(`
+            <div class="modal-h">Detalle de Tarea</div>
+            ${
+              isAdmin
+                ? `
+              <div class="fg"><label class="fl">Título</label><input class="fi" id="edt-title" value="${t.title}"></div>
+              <div class="fg"><label class="fl">Descripción</label><textarea class="ft" id="edt-desc">${t.desc}</textarea></div>
+              <div class="fgrid">
+                <div class="fg"><label class="fl">Técnico</label>
+                  <select class="fs" id="edt-tech">${H.techs()
+                    .map(
+                      (x) =>
+                        `<option value="${x.uid}" ${x.uid === t.techId ? "selected" : ""}>${x.name}</option>`,
+                    )
+                    .join("")}</select>
+                </div>
+                <div class="fg"><label class="fl">Fecha Programada</label><input class="fi" type="date" id="edt-date" value="${t.estimatedDate}"></div>
+              </div>
+              <div class="fgrid">
+                <div class="fg"><label class="fl">Estado</label>
+                  <select class="fs" id="edt-status">
+                    <option value="pending" ${t.status === "pending" ? "selected" : ""}>Pendiente</option>
+                    <option value="inprogress" ${t.status === "inprogress" ? "selected" : ""}>En Progreso</option>
+                    <option value="approval" ${t.status === "approval" ? "selected" : ""}>Aprobación</option>
+                    <option value="done" ${t.status === "done" ? "selected" : ""}>Finalizado</option>
+                  </select>
+                </div>
+                <div class="fg"><label class="fl">Prioridad</label>
+                  <select class="fs" id="edt-priority">
+                    <option value="baja" ${t.priority === "baja" ? "selected" : ""}>Baja</option>
+                    <option value="media" ${t.priority === "media" ? "selected" : ""}>Media</option>
+                    <option value="alta" ${t.priority === "alta" ? "selected" : ""}>Alta</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fg"><label class="fl">Progreso (${t.progress}%)</label>
+                <input type="range" class="fi" id="edt-progress" min="0" max="100" value="${t.progress}" oninput="this.previousElementSibling.innerText='Progreso ('+this.value+'%)'">
+              </div>
+              <div class="fg"><label class="fl">Valor del Servicio ($)</label><input class="fi" type="number" id="edt-cost" value="${t.cost || 0}"></div>
+            `
+                : `
+              <div style="border-left:3px solid ${H.prColor(t.priority)};padding-left:12px;margin-bottom:18px">
+                <div style="font-weight:800;font-size:18px">${t.title}</div>
+                <div style="color:var(--t3);font-size:12px">Fecha: ${t.estimatedDate}</div>
+              </div>
+              <div style="margin-bottom:18px">${t.desc}</div>
+              
+              <div class="fg"><label class="fl">Actualizar Progreso (${t.progress}%)</label>
+                <input type="range" style="width:100%" id="edt-progress" min="0" max="100" value="${t.progress}" oninput="this.previousElementSibling.innerText='Actualizar Progreso ('+this.value+'%)'" ${isAdmin || CU.uid === t.techId ? "" : "disabled"}>
+              </div>
+
+              <div class="prog-track" style="margin-top:10px"><div class="prog-fill" style="width:${t.progress}%;background:${H.pc(t.progress)}"></div></div>
+            `
+            }
+            
+            ${attHTML}
+            
+            <div class="divider"></div>
+            <div style="font-size:11px;color:var(--t4);display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+              <div><b>Creada:</b> ${t.createdAt ? new Date(t.createdAt).toLocaleString() : "—"}</div>
+              <div><b>Iniciada:</b> ${t.startedAt ? new Date(t.startedAt).toLocaleString() : "—"}</div>
+              <div><b>Finalizada:</b> ${t.completedAt ? new Date(t.completedAt).toLocaleString() : "—"}</div>
+            </div>
+
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cerrar</button>
+              ${
+                isAdmin
+                  ? `
+                <button class="btn btn-danger" onclick="deleteTask('${t.id}')">Eliminar</button>
+                <button class="btn btn-brand" onclick="updateTask('${t.id}')">Guardar Cambios</button>
+              `
+                  : CU.uid === t.techId
+                    ? `<button class="btn btn-brand" onclick="openReportModal('${t.id}')">Reportar Novedad</button> <button class="btn btn-brand" onclick="updateTask('${t.id}')">Actualizar Progreso</button>`
+                    : ""
+              }
+            </div>
+          `);
+      }
+
+      async function uploadAttachment(tid) {
+        const t = H.task(tid);
+        if (!t) return;
+        if (CU.role !== "admin" && t.techId !== CU.uid) {
+          return toast("No tienes permiso para subir archivos", "err");
+        }
+        const fileInput = document.getElementById("edt-file");
+        const file = fileInput.files[0];
+        if (!file) {
+          toast("Selecciona un archivo", "err");
+          return;
+        }
+
+        try {
+          const btn = fileInput.nextElementSibling;
+          btn.textContent = "Subiendo...";
+          btn.disabled = true;
+
+          const { storage, db } = await ensureFirestoreReady();
+          if (!storage) throw new Error("Firebase Storage no disponible");
+
+          const ext = file.name.split(".").pop();
+          const safeName = file.name.replace(/[^a-z0-9.]/gi, "_").toLowerCase();
+          const path = `tasks/${tid}/${Date.now()}_${safeName}`;
+          const ref = storage.ref(path);
+
+          await ref.put(file);
+          const url = await ref.getDownloadURL();
+
+          const t = H.task(tid);
+          const attachments = t.attachments || [];
+          attachments.push({ name: file.name, url, path });
+
+          await db.collection("tasks").doc(tid).update({ attachments });
+          toast("Archivo subido con éxito", "ok");
+
+          // Re-render modal silently
+          openTaskDetail(tid);
+        } catch (e) {
+          console.error(e);
+          toast("Error al subir: " + e.message, "err");
+        }
+      }
+
+      async function deleteAttachment(tid, url) {
+        const t = H.task(tid);
+        if (!t) return;
+        if (CU.role !== "admin" && t.techId !== CU.uid) {
+          return toast("No tienes permiso para eliminar archivos", "err");
+        }
+        if (!confirm("¿Eliminar archivo?")) return;
+        try {
+          const { db, storage } = await ensureFirestoreReady();
+          const t = H.task(tid);
+          const att = (t.attachments || []).find((a) => a.url === url);
+          if (!att) return;
+
+          if (storage && att.path) {
+            try {
+              await storage.ref(att.path).delete();
+            } catch (e) {
+              console.warn("File not in storage", e);
+            }
+          }
+
+          const attachments = t.attachments.filter((a) => a.url !== url);
+          await db.collection("tasks").doc(tid).update({ attachments });
+          toast("Archivo eliminado", "ok");
+          openTaskDetail(tid);
+        } catch (e) {
+          toast("Error al eliminar", "err");
+        }
+      }
+
+      async function updateTask(tid) {
+        const t = H.task(tid);
+        if (!t) return;
+        if (CU.role !== "admin" && t.techId !== CU.uid) {
+          return toast("No tienes permiso para modificar esta tarea", "err");
+        }
+        try {
+          const { db } = await ensureFirestoreReady();
+          const status =
+            document.getElementById("edt-status")?.value || t.status;
+          const progress = parseInt(
+            document.getElementById("edt-progress").value,
+          );
+
+          const updates = {
+            title: document.getElementById("edt-title")?.value || t.title,
+            desc: document.getElementById("edt-desc")?.value || t.desc,
+            techId: document.getElementById("edt-tech")?.value || t.techId,
+            estimatedDate:
+              document.getElementById("edt-date")?.value || t.estimatedDate,
+            status: status,
+            priority:
+              document.getElementById("edt-priority")?.value || t.priority,
+            progress: progress,
+            cost: document.getElementById("edt-cost")
+              ? parseInt(document.getElementById("edt-cost").value) || 0
+              : t.cost || 0,
+          };
+
+          // Timestamps logic
+          if (status === "inprogress" && !t.startedAt)
+            updates.startedAt = new Date().toISOString();
+          if (status === "done" && !t.completedAt) {
+            updates.completedAt = new Date().toISOString();
+            updates.progress = 100;
+          }
+          if (status === "pending") {
+            updates.startedAt = null;
+            updates.completedAt = null;
+          }
+
+          await db.collection("tasks").doc(tid).update(updates);
+          toast("Cambios guardados", "ok");
+          closeModal();
+          await refreshTasksFromFirestore();
+          nav(VIEW);
+        } catch (e) {
+          toast("Error al actualizar", "err");
+        }
+      }
+
+      async function deleteTask(tid) {
+        const t = H.task(tid);
+        if (!t) return;
+        if (CU.role !== "admin" && t.techId !== CU.uid) {
+          return toast("No tienes permiso para eliminar esta tarea", "err");
+        }
+        if (!confirm("¿Eliminar esta tarea permanentemente?")) return;
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("tasks").doc(tid).delete();
+          toast("Tarea eliminada", "ok");
+          closeModal();
+          await refreshTasksFromFirestore();
+          nav(VIEW);
+        } catch (e) {
+          toast("Error al eliminar", "err");
+        }
+      }
+
+      function openNewTask(date = "") {
+        const clients = H.clients(),
+          techs = H.techs();
+        showModal(`
+            <div class="modal-h">Nueva Tarea</div>
+            <div class="fg"><label class="fl">Título</label><input class="fi" id="nt-title"></div>
+            <div class="fg"><label class="fl">Descripción</label><textarea class="ft" id="nt-desc"></textarea></div>
+            <div class="fgrid">
+              <div class="fg"><label class="fl">Cliente</label><select class="fs" id="nt-client">${clients.map((c) => `<option value="${c.uid}">${c.name}</option>`).join("")}</select></div>
+              <div class="fg"><label class="fl">Técnico</label><select class="fs" id="nt-tech">${techs.map((t) => `<option value="${t.uid}">${t.name}</option>`).join("")}</select></div>
+            </div>
+            <div class="fgrid">
+              <div class="fg"><label class="fl">Fecha</label><input class="fi" type="date" id="nt-date" value="${date || new Date().toISOString().slice(0, 10)}"></div>
+              <div class="fg"><label class="fl">Prioridad</label><select class="fs" id="nt-priority"><option value="baja">Baja</option><option value="media">Media</option><option value="alta">Alta</option></select></div>
+            </div>
+            <div class="fg"><label class="fl">Valor del Servicio ($)</label><input class="fi" type="number" id="nt-cost" value="0"></div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+              <button class="btn btn-brand" onclick="createTask()">Crear Tarea</button>
+            </div>
+          `);
+      }
+
+      async function createTask() {
+        const title = document.getElementById("nt-title").value;
+        const desc = document.getElementById("nt-desc").value;
+        const clientId = document.getElementById("nt-client").value;
+        const techId = document.getElementById("nt-tech").value;
+        const estimatedDate = document.getElementById("nt-date").value;
+        const priority = document.getElementById("nt-priority").value;
+        const cost = parseInt(document.getElementById("nt-cost").value) || 0;
+
+        if (!title) return toast("Título requerido", "err");
+
+        const newTask = {
+          title,
+          desc,
+          clientId,
+          techId,
+          estimatedDate,
+          priority,
+          cost,
+          status: "pending",
+          progress: 0,
+          createdAt: new Date().toISOString(),
+          startedAt: null,
+          completedAt: null,
+        };
+
+        try {
+          const { db } = await ensureFirestoreReady();
+          const ref = await db.collection("tasks").add(newTask);
+          newTask.id = ref.id;
+          API.tasks.unshift(newTask);
+          toast("Tarea creada exitosamente", "ok");
+          nav(VIEW);
+          closeModal();
+        } catch (e) {
+          toast("Error al crear tarea", "err");
+        }
+      }
+
+      function openReportModal(tid) {
+        const t = H.task(tid);
+        showModal(`
+            <div class="modal-h">Reportar Novedad / Requerimiento</div>
+            <div class="fg"><label class="fl">Tipo de Requerimiento</label>
+              <select class="fs" id="apr-type">
+                <option value="Suministro de Discos Duros">Suministro de Discos Duros</option>
+                <option value="Cambio de Componentes">Cambio de Componentes</option>
+                <option value="Cambio de Dispositivo">Cambio de Dispositivo</option>
+                <option value="Servicio Adicional">Servicio Adicional</option>
+              </select>
+            </div>
+            <div class="fg"><label class="fl">Novedad / Justificación</label>
+              <textarea class="ft" id="apr-novelty" placeholder="Explique la novedad del por qué hay que hacer el cambio o lo que toque hacer..."></textarea>
+            </div>
+            <div class="fg"><label class="fl">Costo Estimado</label><input class="fi" type="number" id="apr-cost" value="0"></div>
+            <div class="modal-foot">
+              <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+              <button class="btn btn-brand" onclick="submitApproval('${tid}')">Enviar para Aprobación</button>
+            </div>
+          `);
+      }
+
+      async function submitApproval(tid) {
+        const type = document.getElementById("apr-type").value;
+        const novelty = document.getElementById("apr-novelty").value;
+        const cost = parseFloat(document.getElementById("apr-cost").value);
+
+        if (!novelty) return toast("Debe indicar la novedad detallada", "err");
+
+        try {
+          const { db } = await ensureFirestoreReady();
+          await db.collection("approvals").add({
+            taskId: tid,
+            type,
+            novelty,
+            cost,
+            status: "pending",
+            createdAt: new Date().toISOString(),
+          });
+          await db
+            .collection("tasks")
+            .doc(tid)
+            .update({
+              status: "approval",
+              startedAt: H.task(tid).startedAt || new Date().toISOString(),
+            });
+          toast("Solicitud de aprobación enviada", "ok");
+          closeModal();
+          await refreshTasksFromFirestore();
+          await refreshApprovalsFromFirestore();
+          nav(VIEW);
+        } catch (e) {
+          toast("Error al enviar solicitud", "err");
+        }
+      }
+
+      async function runReseed() {
+        if (
+          !confirm(
+            "¿Deseas restaurar la base de datos con datos de demostración? Se cerrará la sesión.",
+          )
+        )
+          return;
+        try {
+          const { db, auth, config } = await ensureFirestoreReady();
+          const batch = db.batch();
+          const today = new Date();
+          const fmtDate = (d) => d.toISOString().slice(0, 10);
+
+          // 1. Seed Users
+          const userIds = [];
+          PREDEFINED_USERS.forEach((u, i) => {
+            const uid =
+              u.email === "admin@sv-services.com"
+                ? "admin_demo_id"
+                : `user_demo_${i}`;
+            userIds.push(uid);
+            const ref = db.collection(config.usersCollection).doc(uid);
+            batch.set(ref, {
+              ...u,
+              uid,
+              is_active: true,
+              joined: fmtDate(today),
+              tasks_done: 5,
+              baseHours: 48,
+            });
+          });
+
+          // 2. Seed Tasks (Distributed Mon-Fri)
+          const tasks = [
+            {
+              title: "Mantenimiento Preventivo UPS",
+              desc: "Revisión semestral de baterías y circuitos.",
+              priority: "alta",
+              cost: 150000,
+            },
+            {
+              title: "Instalación Puesto de Trabajo",
+              desc: "Cableado estructurado y configuración de equipo.",
+              priority: "media",
+              cost: 85000,
+            },
+            {
+              title: "Soporte Técnico Nivel 1",
+              desc: "Revisión de lentitud en aplicaciones corporativas.",
+              priority: "baja",
+              cost: 45000,
+            },
+            {
+              title: "Configuración Servidor NAS",
+              desc: "Backup centralizado y cuotas de usuario.",
+              priority: "alta",
+              cost: 320000,
+            },
+            {
+              title: "Limpieza Física Impresoras",
+              desc: "Mantenimiento preventivo lote 5 impresoras.",
+              priority: "media",
+              cost: 120000,
+            },
+            {
+              title: "Auditoría de Red Wi-Fi",
+              desc: "Mapa de calor y optimización de canales.",
+              priority: "media",
+              cost: 200000,
+            },
+            {
+              title: "Actualización Firewall",
+              desc: "Implementación de nuevas reglas de seguridad.",
+              priority: "alta",
+              cost: 180000,
+            },
+            {
+              title: "Capacitación Office 365",
+              desc: "Sesión de 2 horas para nuevos empleados.",
+              priority: "baja",
+              cost: 0,
+            },
+          ];
+
+          const adminUid = userIds[0],
+            techUid = userIds[1],
+            clientUid = userIds[2];
+          const taskIds = [];
+
+          tasks.forEach((t, i) => {
+            const tDate = new Date();
+            // Distribute Mon-Fri (1 to 5)
+            const dayOffset = (i % 5) + 1;
+            tDate.setDate(today.getDate() + (dayOffset - today.getDay()));
+
+            const taskData = {
+              ...t,
+              clientId: clientUid,
+              techId: techUid,
+              status: i < 5 ? "approval" : "inprogress",
+              progress: i < 5 ? 90 : 30,
+              createdAt: fmtDate(today),
+              estimatedDate: fmtDate(tDate),
+              timeline: [],
+            };
+            const tRef = db.collection("tasks").doc(`task_demo_${i}`);
+            taskIds.push(tRef.id);
+            batch.set(tRef, taskData);
+          });
+
+          // 3. Seed Approvals (5 items)
+          const appTypes = [
+            "Suministro de Discos Duros",
+            "Cambio de Componentes",
+            "Cambio de Dispositivo",
+            "Suministro de Discos Duros",
+            "Cambio de Componentes",
+          ];
+          const appNovelties = [
+            "El disco duro actual presenta sectores defectuosos y riesgo inminente de pérdida de datos. Se requiere SSD de 1TB.",
+            "La fuente de poder no entrega voltaje estable, causando reinicios inesperados en el equipo de gerencia.",
+            "El equipo portátil del área comercial sufrió daño físico en la bisagra y pantalla. Se requiere cambio por equipo nuevo.",
+            "Ampliación de capacidad de almacenamiento para el servidor principal de base de datos debido a sobrecupo.",
+            "Cambio de memoria RAM de 8GB a 16GB por cuellos de botella en el software de renderizado.",
+          ];
+          const appStatuses = [
+            "pending",
+            "inprogress",
+            "approved",
+            "pending",
+            "inprogress",
+          ];
+
+          for (let i = 0; i < 5; i++) {
+            const aRef = db.collection("approvals").doc(`app_demo_${i}`);
+            batch.set(aRef, {
+              taskId: `task_demo_${i}`,
+              requestDate: fmtDate(today),
+              status: appStatuses[i],
+              type: appTypes[i],
+              novelty: appNovelties[i],
+              cost: [250000, 150000, 1200000, 320000, 180000][i],
+              createdAt: new Date().toISOString(),
+            });
+          }
+
+          await batch.commit();
+          await auth.signOut();
+          toast(
+            "Demostración cargada con éxito. Por favor inicia sesión de nuevo.",
+            "ok",
+          );
+          setTimeout(() => location.reload(), 2500);
+        } catch (e) {
+          console.error(e);
+          toast("Error en restauración: " + e.message, "err");
+        }
+      }
+
+      /* UTILS */
+      function showModal(html) {
+        document.getElementById("modalRoot").innerHTML =
+          `<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${html}<button class="modal-close" onclick="closeModal()">✕</button></div></div>`;
+      }
+      function closeModal() {
+        document.getElementById("modalRoot").innerHTML = "";
+      }
+      function toast(msg, type = "ok") {
+        const r = document.getElementById("toastRoot");
+        const el = document.createElement("div");
+        el.className = `toast toast-${type}`;
+        el.textContent = msg;
+        r.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = "0";
+          setTimeout(() => el.remove(), 300);
+        }, 3000);
+      }
+      function toggleNotif() {
+        NOTIF_OPEN = !NOTIF_OPEN;
+        document.getElementById("npanel").classList.toggle("open", NOTIF_OPEN);
+      }
+
+      /* INIT */
+      async function init() {
+        loadPersistedConfig();
+        try {
+          const { auth } = await ensureFirestoreReady();
+          auth.onAuthStateChanged(async (user) => {
+            console.log("Auth state changed:", user ? user.email : "No user");
+            try {
+              if (user) {
+                await applyAuthenticatedSession(user);
+
+                // Initialize real-time synchronization
+                try {
+                  console.log("Starting real-time synchronization...");
+                  await setupRealtimeListeners();
+                  console.log("Real-time sync active.");
+                } catch (dataError) {
+                  console.error("Initial sync error:", dataError);
+                }
+
+                nav("dashboard");
+              } else {
+                resetSessionView("Bienvenido. Ingresa para continuar.");
+              }
+            } catch (e) {
+              console.error("Auth State Error:", e);
+              resetSessionView("Error de sesión: " + e.message, "err");
+            }
+          });
+        } catch (e) {
+          console.error("Init Error:", e);
+          setLoginStatus("Error de configuración Firebase.", "err");
+        }
+      }
+
+      window.onload = init;
+    </script>
+  </body>
+</html>
